@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+//import 'questions.dart';
+import 'quizBrain.dart';
+
+QuizBrain quizBrainOne =new QuizBrain();
 
 void main() => runApp(Quizzler());
 
@@ -25,6 +29,66 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
+
+//
+//  List<String> questions = ['You can lead a cow down stairs but not up stairs.',
+//    'Approximately one quarter of human bones are in the feet.',
+//    'A slug\'s blood is green.',
+//  ];
+//  List<bool> answers = [false, true, true];
+
+  List<Icon> score_saver = [];
+
+//List<Question> questionBank =[
+//  Question(qst: 'You can lead a cow down stairs but not up stairs.',ans: false,),
+//  Question(qst: 'Approximately one quarter of human bones are in the feet.',ans: true),
+//  Question(qst:'A slug\'s blood is green.' ,ans: true)
+//];
+
+//int question_number =0;
+
+
+  void checkAnswer(bool userAnswer){
+
+    //The user picked false.
+    bool correctAnswer = quizBrainOne.getQuestionAnswer();
+//                we can cheat and set it to true
+//                not only that man we can interfere with the quiz brains job to
+//                increase complexity
+
+    setState(() {
+    if (correctAnswer==userAnswer){
+      print('the user got it right');
+
+      score_saver.add(Icon(
+                    Icons.check_circle,
+                    color: Colors.green,
+                    size: 15,
+                  ));
+    }else{
+      print('the user got it wrong');
+
+      score_saver.add(Icon(
+                    Icons.cancel,
+                    color: Colors.red,
+                    size: 15,
+                  ));
+    }
+
+      quizBrainOne.nextQuestion();
+//                --------------------
+
+//                  score_saver.add(Icon(
+//                    Icons.cancel,
+//                    color: Colors.red,
+//                    size: 30,
+//                  ));
+//                --------------------
+
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -37,7 +101,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                'This is where the question text will go.',
+                quizBrainOne.getQuestionText(),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 25.0,
@@ -61,7 +125,29 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                //The user picked true.
+                checkAnswer(true);
+//                //The user picked true.
+//                bool correctAnswer = quizBrainOne.getQuestionAnswer();
+////                we can cheat and set it to true
+////                not only that man we can interfere with the quiz brains job to
+////                increase complexity
+//                if (correctAnswer==true){
+//                  print('the user got it right');
+//                }else{
+//                  print('the user got it wrong');
+//                }
+//                setState(() {
+//                  quizBrainOne.nextQuestion();
+//
+////                --------------------
+////                  score_saver.add(Icon(
+////                    Icons.check_circle,
+////                    color: Colors.green,
+////                    size: 30,
+////                  ));
+////                --------------------
+//                });
+
               },
             ),
           ),
@@ -79,12 +165,17 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                //The user picked false.
+                checkAnswer(false);
               },
             ),
           ),
         ),
-        //TODO: Add a Row here as your score keeper
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            children: score_saver,
+          ),
+        ),
       ],
     );
   }
